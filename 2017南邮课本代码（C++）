@@ -1,0 +1,1952 @@
+C++程序设计
+南京邮电大学 
+
+第一章：面向对象的程序设计
+第二章：C++对C的扩展
+1.用new为10个整数的数组申请内存分配，再用delete释放内存
+Int *ptr=new int   利用new申请一个int 大小的内存空间，指针指向起始位置
+Int *ptr=new int[10]  利用new申请一个10个int大小的动态一维数组
+
+delete 指针名 释放一个空间
+delete []指针名  释放数组的空间
+
+#include <iostream>
+using namespace std;
+int main()
+{
+cout<<"please input 10 int numbers:"<<endl;   //cout>>输出语句,endl换行
+int *p=new int [10];  //为一维数组申请空间
+int i;
+int a=0;int b=0;
+for(i=0;i<10;i++)
+{
+     cin>>p[i];    //cin>>输入语句
+if(p[i]>0)
+    a++;
+if(p[i]<0)
+    b++;
+ }
+cout<<"positive="<<a<<";negative="<<b<<"\n";
+delete p;     //释放内存
+return 0;
+}
+
+
+2.const的基本用法
+
+A.const 做的不是简单的替换，而是科学的替换，这点和宏定义不同，如：
+#include <iostream>
+using namespace std;
+int main()
+{
+int x=5;
+const int T1=x+x;
+const int T2=T1-T1;
+cout<<"T1="<<T1<<" T2="<<T2<<endl;
+return 0;
+}
+此时T1=10；T2=0；
+
+#include <iostream>
+using namespace std;
+int main()
+{
+int x=5;
+#define int T1=x+x;
+#define int T2=T1-T1;
+cout<<"T1="<<T1<<" T2="<<T2<<endl;
+return 0;
+}
+此时T1=10；T2=10；
+
+B.const 和指针相结合
+
+---const int *p=&x;  即int const *p=&x;
+这里面*P不可以改变，此时不可以通过指针改变实际参数的值.如p[2]=100错误的，但是x=100是正确的，因为它没有通过指针来改变。
+
+---int *const p;
+这里的p不可以改变。
+
+--const int * const p=&x;
+这里*p和p都不可以改动。  
+
+3.强制类型转换
+double f=100.23
+int x; x=int(f);
+
+4.内联函数inline
+   并不是所有的函数都适合定义为内联函数的。在内联函数中不允许用循环语句和开关语句。递归函数是不能作为内联函数的。实际上内联函数只试用于短小的函数中。
+   和const一样，inline的替换是科学的替换，这点和宏定义不同。
+
+5.引用
+在声明时通过&来标记。
+#include <iostream>
+using namespace std;
+
+int main()
+{
+   int x=5,y=10;
+   int &r=x;   //此处r就是引用，实际上是x的别名
+   r=y;
+   cout<<"x="<<x<<endl;
+   cout<<"r="<<r<<endl;
+return 0;
+}
+
+引用作为形式参数
+在作为函数形式参数被调用时，相当于是C语言中的指针，通过改变别名的内容，从而达到修改主函数中实际参数的大小。
+下面以熟悉的swap函数为例：
+#include <iostream>
+using namespace std;
+void swap(int &x,int &y)
+{
+int temp;
+   temp=x;
+   x=y;
+   y=temp;
+}
+int main()
+{
+int a,b;
+   cin>>a>>b;
+     swap(a,b);
+	 cout<<a<<" "<<b<<" "<<endl;
+return 0;
+}
+引用机制在调用时，系统并没有给x,y分配空间，相当于是给实参a,b起了个别名，和a,b分享了空间。x,y互换的实质是a,b的值的互换。
+引用必须初始化。
+当实参是数组时，不可以用引用机制，这时只能通过指针，指针和可以获得数组的首地址，从而方便访问数组中的元素。
+
+6.异常处理的实现
+C++中用try-catch,throw语句来实现异常处理
+如：
+#include <iostream>
+using namespace std;
+int divide(int x,int y)
+{
+   if(y==0)  throw y;
+   return x/y;
+}
+int main()
+{
+   int a=10,b=5,c=0;
+   try
+   {
+     cout<<"a/b="<<divide(a,b)<<endl;
+     cout<<"b/c="<<divide(b,c)<<endl;
+   }
+   catch(int)
+   {
+   cout<<"分母不能为0."<<endl;
+   }
+   cout<<"计算结束"<<endl;
+return 0;
+}
+
+try-catch语句必须一起出现，一定是try在前catch在后，try和catch间不能有其他任何语句。允许只有try没有catch,表示检查异常但不处理。只能有一个try块，对应的catch块可以有多个，表示可以与不同的异常信息相匹配。
+
+三．类与对象
+7.类是面向对象程序设计的核心。
+类包含数据成员和成员函数两个部分。
+在类的定义中，不能对类的数据成员初始化。
+class中定义成员变量默认的访问属性是private,struct中定义结构成员的默认属性是public.
+只有定义了对象，系统才会为其分配空间。
+
+8.在类外实现成员函数
+#include <iostream>
+using namespace std;
+class Date
+{
+private:
+	int year;
+	int month;
+	int day;
+public:
+	void SetData(int ,int ,int );//对数据成员初始化的公有成员函数
+    void Display(); //显示功能的公有成员函数
+	int GetYear();  //提取day变量值
+};   //分号不可以少
+void Date::SetDate(int y,int m,int d) //类外实现成员函数SetData()
+{
+     year=y;
+     month=m;
+	 day=d;
+}
+int Data::GetYear()
+{
+	return year;
+}
+int Date::Getmonth()
+{
+   return month;
+}
+int Data::GetDay()
+{
+   return day;
+}
+void Data::Display()
+{
+   cout<<year<<"-"<<month<<"-"<<day<<endl;	
+}
+
+8.this 指针
+成员函数可以通过this指针来辨别调用自己的是哪个对象，从而对对象的数据成员处理。
+在C++程序里，每一个成员函数都有一个隐形的指针，称为this指针，用来存放当前对象的地址。大部分程序不出现this指针。
+#include <iostream>
+using namespace std;
+class Data
+{
+public:
+	int year,month,day;
+public:
+	void SetData(int y,int m,int d);
+	void Display();
+};
+void Data::SetData(int y,int m,int d)
+{
+year=y;month=m;day=d;
+}
+
+void Data::Display()
+{
+cout<<"调用该函数的this指针是：";
+cout<<this<<endl;
+cout<<"year="<<this->year<<",month="<<this->month<<endl;
+}
+	
+
+int main()
+{
+	Data DataA,DataB;
+	DataA.SetData(2017,3,18);
+	DataB.SetData(2017,3,31);
+	cout<<"DataA的地址："<<&DataA<<endl;
+	DataA.Display();
+	cout<<"DataB的地址："<<&DataB<<endl;
+	DataB.Display();
+return 0;
+}
+
+9.构造函数
+(1)在定义类的对象时，系统会自动调用构造函数来创建并初始化对象
+(2)构造函数的函数名必须和类名相同
+(3)构造函数必须是public属性，否则无法调用构造函数
+(4)构造函数没有返回值类型，不能加void
+(5)一旦用户自己定义了构造函数，系统就不在提供默认的构造函数
+>>若自己没有定义构造函数，则系统会提供一个不带参数的构造函数，只负责给对象分配空间，不负责初始化。如下面的程序输出的就是一组随机数
+#include <iostream>
+using namespace std;
+class Date
+{
+private:
+	int year;int month;int day;
+public:
+	void Display();
+};
+
+void Date::Display()
+{
+cout<<year<<'-'<<month<<'-'<<day<<endl;
+}
+
+int main()
+{
+ Date tomorrow; 
+ tomorrow.Display();
+ return 0;
+}
+例3.9
+#include <iostream>
+using namespace std;
+class Date
+{
+private:
+	int year;int month;int day;
+public:
+	Date(int x,int y,int z);
+	void Display();
+};
+Date::Date(int x,int y,int z)  //构造函数没有返回值类型，不能加void.
+{
+year=x;month=y;day=z;
+}
+void Date::Display()
+{
+cout<<year<<'-'<<month<<'-'<<day<<endl;
+}
+
+int main()
+{
+  Date today(2017,3,27);
+ today.Display();
+  return 0;
+}   
+例3.9变形：无参构造函数
+#include <iostream>
+using namespace std;
+class Date
+{
+private:
+	int year;int month;int day;
+public:
+	Date(int x,int y,int z);
+	Date() {}; //无参构造函数，如果想初始化，可以在{}内部写赋值语句
+	void Display();
+};
+Date::Date(int x,int y,int z)
+{
+year=x;month=y;day=z;
+}
+void Date::Display()
+{
+cout<<year<<'-'<<month<<'-'<<day<<endl;
+}
+
+int main()
+{
+ Date today(2017,3,27);
+ Date tomorrow;
+ tomorrow.Display();//运行的话会生成一组随机数，这里调用了构造函数
+ today.Display();
+ tomorrow=Date(2017,3,28);  //此处定义了无名对象，自动调用构造函数
+ tomorrow.Display();
+ return 0;
+}
+
+例3.10带默认参数的构造函数
+#include<iostream>
+using namespace std;
+class Date
+{
+private:
+	int year,month,day;
+public:
+	Date(int y=2000,int m=1,int d=1);//构造函数的声明，提供默认的参数值
+	void Display();
+};
+Date::Date(int y,int m,int d)//函数定义首部时不能再提供默认值
+{
+   cout<<"Executing constructor..."<<endl;
+   year=y;month=m;day=d;
+}
+void Date::Display()
+{
+  cout<<year<<"-"<<month<<"-"<<day<<endl;
+}
+
+int main()
+{
+  Date day1; //只要生成类的对象，系统就一定会调用构造函数。此时不提供实际参数，全部采用默认值
+  Date day2(2006);
+  Date day3(2006,10,10);
+  cout<<"day1=";
+  day1.Display();
+  cout<<"day2=";
+  day2.Display();
+  cout<<"day3=";
+  day3.Display();
+  return 0;
+}
+
+
+10.拷贝构造函数
+（1）它能够用一个已知的对象初始化另一个创建的同类的新对象。用户可以自己定义拷贝构造函数，从而实现同类对象间的数据成员的值传递。
+（2）拷贝构造函数是一种特殊的函数，在创建类的对象时，如果实际参数是本类的对象，用拷贝构造函数。
+例3.11
+#include <iostream>
+using namespace std;
+class Date
+{
+private:
+	int year;int month;int day;
+public:
+	Date(int a=2017,int b=3,int c=27);
+	Date(const Date &date);
+	void Display();
+};
+Date::Date(int a,int b,int c)  //普通构造函数的定义
+{
+year=a;month=b;day=c;
+cout<<"constructor called.\n";
+}
+Date::Date(const Date &date)  //拷贝构造函数的定义
+{
+	year=date.year;
+	month=date.month;
+	day=date.day;
+	cout<<"copy constructor called.\n";
+}
+void Date::Display()
+{
+cout<<year<<"-"<<month<<"-"<<day<<endl;
+}
+
+int main()
+{
+ Date day1(2017,3,27);  //调用普通构造函数
+ Date day3;    //调用普通构造函数
+ Date day2(day1);   //调用拷贝构造函数
+ Date day4=day2;  //等价于Date day4(day2)
+ day3=day2;  //这个是赋值语句，因为day3和day2都是旧对象，而拷贝构造函数是建立一个新对象，将旧对象拷贝给新对象
+ return 0;
+}
+11.析构函数
+（1）析构函数没有返回值类型，不加void
+（2）析构函数没有形式参数，因此不能重载，每个类只能有一个析构函数。而构造函数可以重载，因此可以有多个构造函数，这个也是构造函数和析构函数的一个不同之处。
+using namespace std;
+class Date
+{
+private:
+	int year;int month;int day;
+public:
+	Date(int ,int ,int );
+	void Display();
+	~Date();
+};
+Date::Date(int a,int b,int c)  
+{
+year=a;month=b;day=c;
+cout<<"constructor called.\n";
+}
+Date::~Date()
+{
+  cout<<"Destructor called.\n";
+}
+
+void Date::Display()
+{
+cout<<year<<"-"<<month<<"-"<<day<<endl;
+}
+
+int main()
+{
+ Date day1(2017,3,27);  
+ day1.Display();
+return 0;
+}
+12.深拷贝和浅拷贝
+见书本P73
+
+13.友元
+友元分为三类，友元函数，友元成员，友元类
+（1）友元函数
+（2）友元成员
+（3）友元类
+例3.24将Date作为Student的友元，也就是Date可以直接访问Student中的私有信息
+#include <iostream>
+#include<iostream>
+#include<string> //库函数，字符串的读入输出方便
+using namespace std;
+class Student;  //向前引用，因为后面定义的Date类中用到了Student类型
+class Date
+{
+private:
+	int year,month,day;
+public:
+	Date(int y=2001,int m=2,int d=3);
+	void Display(const Student &stu); //成员函数，其形参为类Student的对象引用
+};
+class Student
+{
+private:
+	char *zyname;
+public:
+	Student(char *zyname);
+	~Student();
+	friend void Date::Display(const Student &); //这句是友元的声明语句
+};
+
+Date::Date(int y,int m,int d)
+{
+    year=y;month=m;day=d;
+	cout<<"Constructor called.\n";
+}
+void Date::Display(const Student &stu)
+{
+   cout<<stu.zyname<<endl;
+   cout<<year<<"-"<<month<<"-"<<day<<endl;
+}
+
+Student::Student(char *pSpec)
+{
+	if(pSpec)
+	{
+	zyname=new char(strlen(pSpec)+1);
+	strcpy(zyname,pSpec);
+	}
+	else zyname=0;
+}
+Student::~Student()
+{
+   if(zyname)
+	   delete []zyname;
+}
+
+int main()
+{
+   Student zhang("Computer");
+   Date Birthday(1998,10,1);
+   Birthday.Display(zhang);
+return 0;
+}
+
+（4）友元类
+#include<iostream>
+#include<string>
+using namespace std;
+class Student;//Date的申明中用到了Student
+class Date
+{
+private:
+	int year,month,day;
+public:
+	Date(int ,int ,int );
+	void Display();
+	friend Student;  //Friend作为友元类
+};
+
+class Student
+{
+private:
+	char *zyname;
+	char *name;
+public:
+	Student(char *pn,char *pSpec);
+	~Student();
+	void Display(Date &); //类student中的所有成员均可以直接访问类Date中的所有成员
+};
+
+Date::Date(int y,int m,int d):year(y),month(m),day(d) //构造函数
+{ }
+void Date::Display()
+{
+	cout<<year<<"-"<<month<<"-"<<day<<endl;
+}
+Student::Student(char *pn,char *pSpec)
+{
+  if(pSpec)
+  {
+    zyname=new char[strlen(pSpec)+1];
+    strcpy(zyname,pSpec);
+  }
+  else 
+	  zyname=0;
+  if(pn)
+  {
+    name=new char[strlen(pn)+1];
+	strcpy(name,pn);
+  }
+	else 
+		name=0;
+}
+  
+Student::~Student()
+{
+    if(zyname)
+	    delete []zyname;
+	if(name)
+		delete []name;
+}
+void Student::Display(Date& obj)
+{
+cout<<name<<endl;
+cout<<zyname<<endl;
+obj.Display();
+cout<<"Date's another format is:";
+cout<<obj.month<<"_"<<obj.day<<"_"<<obj.year<<endl;
+}
+
+int main()
+{
+  Student boy("zhang","computer");
+  Date birthday(1990,10,17);
+  boy.Display(birthday);
+  return 0;
+}
+
+
+例：关于友元类的应用
+#include<iostream>
+using namespace std;
+class Student;
+class Date
+{
+private:
+	int year,month,day;
+public:
+	Date(int ,int ,int );
+	void Display();
+    friend Student;
+};
+class Student
+{
+private:
+	int ID;
+public:
+	Student(int x);
+	void Display(Date &); //Student中的所有成员函数都可以直接访问Date中的所有成员
+};
+
+Date::Date(int y,int m,int d)
+{
+	year=y;month=m;day=d;
+}
+void Date::Display()
+{
+  cout<<year<<"-"<<month<<"-"<<day<<endl;
+}
+
+Student::Student(int x)
+{
+	ID=x;
+}
+void Student::Display(Date& obj)//Student::Display可以直接访问Date中所有成员函数
+{
+   cout<<ID<<endl;
+   obj.Display(); //访问友元类对象的成员函数
+   cout<<obj.day<<" "<<obj.month<<" "<<obj.year<<endl;//访问友元类中的私有数据
+}
+int main()
+{
+  Student boy(1002);
+  Date birthday(1998,3,1);
+  boy.Display(birthday);
+  return 0;
+}
+
+>>第一次实验报告
+第一题：
+#include<iostream>
+using namespace std;
+class Time
+{
+private:
+	int Hour,Minute,Second;
+public:
+	Time(int ,int ,int );
+	~Time();
+	void ChangeTime(int ,int ,int );
+	void PrintTime();
+	void AddSecond(int ,int ,int );
+	void f(Time t);
+	Time(const Time &time);
+};
+
+//构造函数
+Time::Time(int H,int M,int S)
+{
+	Hour=H;Minute=M;Second=S;
+}
+//析构函数
+Time::~Time()
+{}
+void Time::ChangeTime(int H1,int M1,int S1)
+{
+  Hour=H1;Minute=M1;Second=S1;
+}
+void Time::PrintTime()
+{
+   cout<<Hour<<"-"<<Minute<<"-"<<Second<<endl;
+}
+void Time::AddSecond(int H,int M,int S)
+{
+	if(S==59)
+	{
+	S=0;
+    cout<<H<<"-"<<M+1<<"-"<<S<<endl;
+	}
+	else
+	cout<<H<<"-"<<M<<"-"<<S+1<<endl;
+}
+void f(Time t)
+{
+  t.PrintTime();
+}
+Time::Time(const Time &time)
+{
+  Hour=time.Hour;
+  Minute=time.Minute;
+  Second=time.Second;
+}
+
+
+int main()
+{
+   Time t1(2,30,15);
+   t1.ChangeTime(3,30,15);
+   t1.PrintTime();
+   t1.AddSecond(2,30,15);
+   f(t1);
+   Time t2(t1);//拷贝构造函数
+return 0;
+}
+
+第二题：
+#include<iostream>
+#include<string>
+using namespace std;
+class Boy;
+class Girl
+{
+private:
+	string name;
+	int age;
+public:
+	Girl(string N,int A);
+	~Girl() {}
+	void Display();
+	friend void VisitBoyGirl(Boy &,Girl &);
+};
+class Boy
+{
+private:
+	string name;
+	int age;
+public:
+	Boy(string N,int A);
+	~Boy() {}
+	void Display();
+	friend void VisitBoyGirl(Boy &,Girl &);
+};
+
+Girl::Girl(string N,int A)
+{
+   name=N;
+   age=A;
+}
+
+void Girl::Display()
+{
+  cout<<name<<age<<endl;
+}
+Boy::Boy( string N,int A)
+{
+  name=N;
+  age=A;
+}
+void Boy::Display()
+{
+  cout<<name<<age<<endl;
+}
+
+void VisitBoyGirl(Boy &b1,Girl &g1)
+{
+   cout<<b1.name<<" "<<b1.age<<endl;
+   cout<<g1.name<<" "<<g1.age<<endl;
+}
+int main()
+{
+   Girl g1("zhang",10);
+   Boy b1("wang",20);
+   g1.Display();
+   b1.Display();
+   VisitBoyGirl(b1,g1);
+   return 0;
+}
+
+第四章：类中数据的共享和保护
+14.静态成员，静态成员函数
+静态数据成员为同类对象公有，必须在类外初始化，且不加static修饰。
+静态数据成员和普通成员最大的区别是它没有this 指针，因为它不属于哪一个具体的对象。
+
+
+15.常数据成员，常成员函数，常对象
+（1）常数据成员的初始化只能在构造函数的初始化列表中进行，不能在函数的函数体中用赋值语句实现。
+#include<iostream>
+using namespace std;
+class Circle
+{
+private:
+	double Radius;
+	const double PI;
+public:
+	Circle(double r):PI(3.1415) //只能通过初始化列表初始化常数据成员
+	{
+	  Radius=r;
+	}
+};
+（2）常成员函数
+常成员函数不可调用普通成员函数。
+#include<iostream>
+using namespace std;
+class Circle
+{
+private:
+	double Radius;
+	const double PI;
+public:
+	Circle(double r):PI(3.1415) //只能通过初始化列表初始化常数据成员
+	{
+	  Radius=r;
+	}
+	double GetRadius()const;//常成员函数，获取半径值
+};
+
+double Student::GetRadius()const//常成员函数，获得半径
+{
+  return Radius;
+};
+（3）常对象
+int main()
+{
+  const Circle r1(10); //定义常对象必须初始化
+}
+
+第五章：类与类之间的关系
+1.类和类主要有三个关系，组合（composition），依赖(dependency)，继承(inheritance)
+2.组合关系：
+对象与它内部的成员对象具有相同的生命周期。
+首先调用对象成员的构造函数，再调用数据自身的构造函数，析构的时候顺序正好相反。
+3.依赖关系：
+一个对象的实现要依赖另一个对象。
+如书本上的赌徒依赖牌。
+4.继承关系：
+引入继承机制的优势在于提高了代码的可重用性。
+
+5.派生类的构造函数：
+每个派生类只需负责直接基类的构造函数的调用，调用顺序以定义的时候为准，而不是初始化列表中的顺序。
+基类构造函数通过其派生对象在初始化列表中实现。
+
+6.同名冲突及解决的方案
+（1）当派生类定义新的对象时，有可能和基类的对象名字同名。此时同名覆盖将起作用，如不加特殊表示，派生类访问的是派生类中新定义的成员。
+（2）共同祖先继承导致冲突
+冲突的根源在于多个派生类的对象都调用了基类的构造函数。
+
+解决方法，调用虚基类，确保构造函数最多被调用一次。虚基类可以实现只有最后一层派生类对基类构造函数的调用发挥作用，其余的调用忽略。
+
+虚基类的作用：减少内存，避免二义性。
+
+虚基类的使用方法：
+class Derived1 :public virtual Base，在继承的时候，使基类为虚基类
+class Derived2 :public virtual Base，在继承的时候，使基类为虚基类
+
+7.赋值兼容原则
+所谓赋值兼容，就是说需要使用基类的地方可以用公有派生类代替，也就是公有派生类可以当成基类用。
+基类的指针指向派生类的对象，基类的引用成为派生类的别名，都只能访问基类的数据成员。想实现基类的指针指向派生类的对象，却访问派生类的数据成员，可以通过下一章动态重载的虚函数实现。
+
+
+编程作业：
+第一题：长方形矩形的构造和继承
+#include<iostream>
+using namespace std;
+class jx
+{
+private:
+	float length;
+	float width;
+public:
+	jx(float l,float w)
+	{
+	   length=l;
+	   width=w;
+	}
+	int area()
+	{
+	return length*width;
+	}
+    void disp()
+	{
+	cout<<area()<<endl;
+	}
+};
+class cfx:public jx  //以公有的方式来继承
+{
+private:
+	float height;
+public:
+	cfx(float l,float w,float h):jx(l,w) //用初始化列表给基类对象初始化，调用基类的构造函数
+	{
+	height=h;
+	}
+	void disp()
+	{
+	cout<<area()*height<<endl;
+	}
+};
+int main()
+{
+   float a,b,c;
+   cin>>a>>b>>c;
+   cfx cfx1(a,b,c);
+   jx jx1(a,b);
+   cfx1.disp();
+   jx1.disp();
+   return 0;
+
+}
+编程第二题：
+编程第二题：窗体顶端
+定义一个点类，一个线类，通过输入两个点，求出以这两个为端点的线段长度。
+#include<iostream>
+#include<math.h>
+using namespace std;
+class Point 
+{
+private:
+	double x;
+	double y;
+public:
+	Point(double a=0,double b=0)
+	{
+	x=a;y=b;
+	}
+	
+	Point(Point &p)
+	{
+		x = p.Getx();
+		y = p.Gety();
+	}
+	double Getx()
+	{
+	return x;
+	}
+    double Gety()
+	{
+	return y;
+	}
+};
+
+class Line
+{
+private:
+	Point A,B;
+	double length;
+public:
+	Line(Point p1,Point p2)
+	{
+	A=p1;
+	B=p2;
+	}
+	double GetLength()
+	{
+		length=sqrt((A.Getx()-B.Getx())*(A.Getx()-B.Getx())+(A.Gety()-B.Gety())*(A.Gety()-B.Gety()));
+	return length;
+	}
+};
+
+int main()
+{
+double a,b,c,d;
+cin>>a>>b>>c>>d;
+Point A(a,b);
+Point B(c,d);
+Line C(A,B);
+cout.precision(3); //保留小数点后2位输出
+cout<<C.GetLength()<<endl;
+return 0;
+}
+
+编程题第三题：
+定义学生和老师类，定义友元函数print，打印老师和学生的相关信息。
+为什么用友元函数呢，因为通过友元函数可以访问类中的私有数据。
+#include<iostream>
+#include<cstring>
+using namespace std;
+class Tea;
+class Stu
+{
+public:
+  char *name;
+  float score;
+  Stu(char a[20],float s=0)
+  {
+  name=a;
+  score=s;
+  }
+friend void print(Stu s,Tea t); //友元函数定义生命
+};
+class Tea
+{
+public:
+	char *name;
+	char *pro;
+	Tea(char a[20],char b[20])
+	{
+	name=a;
+	pro=b;
+	}
+	friend void print(Stu s,Tea t);
+};
+
+void print(Stu S,Tea T)
+{
+  cout<<"student's name:"<<S.name<<"   "<<S.score<<endl;
+  cout<<"Teacher's name:"<<T.name<<"   "<<T.pro<<endl;
+}
+
+int main()
+{
+	char stuname[20],teaname[20],teapro[20]; 
+	cout<<"请输入学生姓名："<<endl; 
+	cin>>stuname; 
+	cout<<"请输入教师姓名："<<endl;
+	cin>>teaname;
+	cout<<"请输入教师职称："<<endl;  
+	cin>>teapro;
+	Stu student(stuname,88);
+	Tea teacher(teaname,teapro);
+	print(student,teacher);
+	return 0;
+}
+编程第四题：
+#include<iostream>
+using namespace std;
+class Student
+{
+private:
+  char *name;
+  int age;
+public:
+	static int count;  //静态局部变量
+	Student(int a,char *n)
+	{
+	age=a;
+	name=n;
+	count++;
+	}
+	Student()
+	{
+	age=0;
+	name="unnamed";
+	count++;
+	}
+	~Student()
+	{
+	count--;
+	}
+	void Print()const  //常函数
+	{
+    cout<<"count="<<count<<endl;
+	cout<<name<<"  "<<age<<endl;
+	}
+};
+int Student::count=0;
+int main()
+{
+    cout<<"count="<<Student::count<<endl;
+    char stuname[20]="ZhangHong";
+    Student s1,*p=new Student(23,stuname);
+    s1.Print();
+    p->Print();
+    delete p;
+    s1.Print();
+    Student Stu[4];
+    cout<<"count="<<Student::count<<endl;
+    return 0;   
+}
+
+第六章：多态性
+静态多态性的实现
+（1）输入和输出的重载
+#include<iostream>
+using namespace std;
+class Date
+{
+public:
+    int year,month,day;
+public:
+	Date(int y=2017,int m=5,int d=1)
+	{
+	year=y;month=m;day=d;
+	}
+    friend ostream & operator << (ostream & out,const Date &); //友元函数重载输出运算符<<
+    friend istream & operator >> (istream & in, Date &);  //友元函数输入运算符>>
+};
+ostream & operator << (ostream & out,const Date &obj)  //返回一个ostream流，方便多组数据的输出
+{
+   out<<obj.year;
+   out<<"-";
+   out<<obj.month;
+   out<<"-";
+   out<<obj.day;
+   out<<endl;
+   return out;
+}
+istream & operator >> (istream & in,Date &obj) //返回一个istream流，方便多组数据的读入。//obj作为引用传入，方便修改数据的值
+{
+   cout<<"Input year ,month ,day of the Date"<<endl;
+   in>>obj.year;
+   in>>obj.month;
+   in>>obj.day;
+   return in;
+}
+int main()
+{
+    Date d1,d2(2011,9,1),d3;
+	cin>>d3;
+	cout<<"the value of the day1 is "<<d1;
+	cout<<"the value of the day2 is "<<d2;
+	cout<<"the value of teh day3 is "<<d3;
+	return 0;
+}
+
+（2）加减法的重载
+例一：实现Point的二维点类相加减
+#include<iostream>
+using namespace std;
+class Point
+{
+public:
+	Point(int a=0,int b=0)
+	{
+	x=a;y=b;
+	}
+	void print()
+	{
+	cout<<"("<<x<<","<<y<<")"<<endl;
+	}
+	Point operator +(Point p1)
+	{
+	  Point p;
+	  p.x=x+p1.x;
+	  p.y=y+p1.y;
+	  return p;
+	}
+	friend Point operator-(Point p1,Point p2)
+	{
+	  Point p;
+	  p.x=p1.x-p2.x;
+	  p.y=p1.y-p2.y;
+	  return p;	
+	}
+private:
+	int x;
+	int y;
+};
+int main()
+{
+   Point p1(1,2),p2(2,4),p3,p4;
+   p3=p1+p2;    //相当于p3=p1.operator+(p2)
+   p4=p1-p2;    //相当于p4=operator-(p1,p2)
+   cout<<"p3=";
+   p3.print();
+   cout<<"p4=";
+   p4.print();
+   return 0;
+}
+
+例二：重载函数，实现复数的加减
+#include<iostream>
+using namespace std;
+class Complex
+{
+public:
+	int real;
+	int img;
+	Complex(int a=0,int b=0)
+	{
+	real=a;img=b;
+	}
+	void print()
+	{
+	  cout<<real;
+	  cout<<"+"<<img<<"i"<<endl;
+	}
+	friend Complex operator +(const Complex &a,const Complex &b);//友元函数重载+，两个形式参数
+	friend Complex operator ++(Complex &a);  //友元重载单目运算++，提供一个参数
+};
+Complex operator +(const Complex &a,const Complex &b)//友元函数通常在类外给出定义
+{
+   Complex x;
+   x.real=a.real+b.real;
+   x.img=x.real+b.real;
+   return x;
+}
+Complex operator ++(Complex &a)
+{
+   ++a.real;
+   ++a.img;
+   return a;
+}
+
+
+int main()
+{
+   Complex c1(1,2),c2(3,4),c3;
+   c3=c1+c2;
+   cout<<"c3=c1+c2 is ";
+   c3.print();
+   ++c2;
+   cout<<"after added 1 c2 is ";
+   c2.print();
+return 0;
+}
+
+动态多态性
+1.动态多态性的实现依赖于虚函数。
+（1）首先在基类中定义虚函数。 virtual void print() 
+（2）然后派生类中的print函数和基类的print函数同名冲突，由覆盖原则，派生中的函数覆盖了基类的函数
+（3）于是指针列表中，存放了一个指向派生类函数的虚指针
+（4）从而，当调用指向派生类的基类指针时，调用的是派生类的print().
+
+2.不能是虚函数的有：静态成员函数，内联函数，构造函数
+
+3.虚析构函数：析构函数往往被声明为虚函数
+
+4.纯虚函数和抽象类：
+纯虚函数只是统一了外部接口，使得其所有派生类中该函数具有统一的接口，使得其所有派生类中该函数有统一的接口并且对应的有统一的实现，而结合抽象类的指针或引用实现动态多态性，在基类中却没有实际内容。
+#include<iostream>
+using namespace std;
+const double pi=3.14;
+class Shape
+{
+public:
+	virtual double area() const=0;   //声明为纯虚函数
+};
+
+class Triangle:public Shape   //定义派生三角形类
+{
+public:
+	Triangle(double b,double h):base(b),height(h)
+    {}
+	double area() const;   //在派生类中定义纯虚函数
+private:
+	double base,height;
+};
+
+class Circle:public Shape  //定义派生园类
+{
+public:
+	Circle(double r):radius(r)
+	{}
+	double area() const;  //在派生类中定义纯虚函数
+private:
+	double radius;
+};
+
+double Triangle::area() const
+{
+  return 0.5*base*height;
+}
+
+double Circle::area() const
+{
+  return pi*radius*radius;
+}
+
+
+int main()
+{
+   Shape *ptr[2];   //基类的指针
+   ptr[0]=new Triangle(2.5,10);  //基类的指针指向派生类的对象
+   ptr[1]=new Circle(3.0);        //基类的指针指向派生类的对象
+   cout<<"The area of Triangle(2.5,10) is ";
+   cout<<ptr[0]->area()<<endl;   //通过动态多态性实现了基类的指针访问派生类的函数
+
+   cout<<"The area of Circle(15,22) is ";
+   cout<<ptr[1]->area()<<endl;    //通过动态多态性实现了基类的指针访问派生类的函数
+   return 0;
+}
+
+//所有派生类中该函数有统一的接口并且对应的有统一的实现，而结合抽象类的指针或引用实现动态多态性，通过ptr这个指向基类的指针，又由于动态多态性，调用起来显得清楚方便。
+
+动态多态性的编程作业：
+第一题：
+#include<iostream>
+using namespace std;
+#include<iomanip>
+const double pi=3.1415;
+class shape
+{
+public:
+	virtual double volume()=0;
+};
+
+class cylinder:public shape
+{
+private:
+	double r;
+	double h;
+public:
+	cylinder(double a,double b)
+	{
+	r=a;h=b;
+	}
+   double volume()
+   {
+   return pi*r*r*h;
+   }  
+};
+
+class sphere:public shape
+{
+private:
+	double r;
+public:
+	sphere(double a)
+	{
+	r=a;
+	}
+	double volume() 
+	{
+	return 4.0000/3.0000*pi*r*r*r;
+	}
+};
+
+int main() {
+   shape *p;
+   double  r,h;
+   cout<<"input r & h："<<endl ;
+   cin>>r>>h;
+   cylinder cy(r,h);
+   sphere sp(r);
+   p=&cy;
+   cout<<setprecision(4);
+   cout<<p-> volume()<<endl;    		
+   p=&sp;
+   cout<<setprecision(6);
+   cout<<p-> volume()<<endl; 
+   return 0;
+}
+第二题：
+
+	
+
+
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+class Matrix
+{
+  int *m,row,col;
+ public:
+  Matrix(int r,int c)
+  {
+    row=r,col=c;
+    m=new int[row*col];
+    cout<<"请输入该矩阵元素:"<<endl;
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+        cin>>m[i*col+j];
+  }
+  Matrix()
+  {
+    row=col=0;
+    m=NULL;
+  }
+  ~Matrix()
+  {
+    delete m;
+  }
+  friend Matrix &operator+(Matrix &,Matrix &);
+  Matrix & operator=(Matrix &mat)
+  {
+    delete m;
+    m=new int[mat.row*mat.col];
+    row=mat.row;
+    col=mat.col;
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+        *(m+i*col+j)=*(mat.m+i*mat.col+j);
+    return *this;
+  }
+  void disp()
+  {
+    for(int i=0;i<row;i++)
+	{
+		cout<<'\t';
+		for(int j=0;j<col;j++)
+			cout<<*(m+i*col+j)<<'\t';
+		cout<<endl;
+	}
+}
+};
+Matrix &operator+(Matrix &mat1,Matrix &mat2)
+{
+  if(mat1.col!=mat2.col||mat1.row!=mat2.row)
+  {
+    cout<<"program terminated!"<<endl;
+    exit(0);
+  }
+  else
+    for(int i=0;i<mat1.row;i++)
+      for(int j=0;j<mat1.col;j++)
+        (*(mat1.m+i*mat1.col+j))+=(*(mat2.m+i*mat2.col+j));
+  return mat1;
+}
+int main()
+{
+	int row_a,col_a,row_b,col_b;
+	cout<<"请输入am矩阵的行数和列数:"<<endl;
+	cin>>row_a>>col_a;
+	Matrix am(row_a,col_a);
+	cout<<"请输入bm矩阵的行数和列数:"<<endl;
+	cin>>row_b>>col_b;
+	Matrix bm(row_b,col_b),cm;
+	cout<<"am:"<<endl;
+	am.disp();
+	cout<<"bm:"<<endl;
+	bm.disp();
+	cm=am+bm;
+	cout<<"cm=am+bm:"<<endl;
+	cm.disp();
+	am=bm;
+	cout<<"am=bm:"<<endl;
+	am.disp();
+	return 0;
+}
+
+上机实验（多态性实验）：
+实验题目1：（定义一个Container的纯虚函数类，继承Cycle,Sphere,Cyclinder，计算三者的面积，体积，输出相关信息）
+#include<iostream>
+using namespace std;
+class Container
+{
+private:
+	double radius;
+public:
+	Container(double r):radius(r)
+	{}
+	virtual double area()=0;//纯虚函数
+	virtual double volume()=0;
+	virtual void print()=0;
+};
+
+class Cube:public Container
+{
+public:
+	double radius; //发生同名覆盖，实现动态多态性
+	Cube(double r):Container(r),radius(r)
+	{}
+    double area()
+	{return 6*radius*radius;}
+	double volume()
+	{return radius*radius*radius;}
+	void print()
+	{cout<<"Cube r="<<radius<<endl;}
+};
+
+class Sphere:public Container
+{
+public:
+	double radius;
+	Sphere(double r):Container(r),radius(r)
+	{}
+	double area()
+	{return 4.0*radius*radius*3.14;}
+	double volume()
+	{return 4.0*3.0*3.14*radius*radius;}
+	void print()
+	{cout<<"Sphere r="<<radius<<endl;}
+};
+
+class Cyclinder:public Container
+{
+public:
+	double radius;
+	double height;
+	Cyclinder(double r,double h):Container(r),radius(r),height(r)
+	{}
+    double area()
+	{return 2*3.14*radius*height+2*3.14*radius*radius;}
+	double volume()
+	{return 3.14*radius*radius*height;}
+	void print()
+	{cout<<"Cyclinder r="<<radius<<"  "<<"h="<<height<<endl;}
+};
+
+int main()
+{
+   Container *p;
+   Cube Cube1(2);
+   Sphere Sphere1(3);
+   Cyclinder Cyclinder1(2,3);
+   
+   p=&Cube1;
+   cout<<p->area()<<endl;
+   cout<<p->volume()<<endl;
+   p->print();
+
+   p=&Sphere1;
+   cout<<p->area()<<endl;
+   cout<<p->volume()<<endl;
+   p->print();
+
+   p=&Cyclinder1;
+   cout<<p->area()<<endl;
+   cout<<p->volume()<<endl;
+   p->print();
+return 0;
+}
+
+
+
+
+
+
+
+
+第七章：模板
+1.函数模板和模板函数：
+例7.3：类模板建立和使用示例
+#include <iostream>
+using namespace std;
+template <class T1,class T2>
+class Myclass
+{
+public:
+   Myclass(T1 xx,T2 yy)
+   {
+     x=xx;y=yy;
+   }
+   void Print()
+   {
+     cout<<"x="<<x<<",y="<<y<<endl;
+   }
+   T1 x;
+   T2 y;
+};
+int main()
+{
+  Myclass<int ,char >obj(10,'a');
+  obj.Print();
+  return 0;
+}
+
+泛程序设计与STL简介
+
+1.容器(vector)：
+本文导语:  Vectors 包含着一系列连续存储的元素,其行为和数组类似。访问Vector中的任意元素或从末尾添加元素都可以在常量级时间复杂度内完成，而查找特定值的元素所处的位置或是在Vector中插入元素则是线性时间复杂度。 &...
+   Vectors 包含着一系列连续存储的元素,其行为和数组类似。访问Vector中的任意元素或从末尾添加元素都可以在常量级时间复杂度内完成，而查找特定值的元素所处的位置或是在Vector中插入元素则是线性时间复杂度。
+   c++ stl容器vector的头文件为:  #include <vector>
+   c++ stl容器vector的成员函数介绍:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23	Constructors构造函数
+Operators对vector进行赋值或比较
+vector::assign()对Vector中的元素赋值
+vector::at()返回指定位置的元素
+vector::back()返回最末一个元素
+vector::begin()返回第一个元素的迭代器
+vector::capacity()返回vector所能容纳的元素数量(在不重新分配内存的情况下）
+vector::clear()清空所有元素
+vector::empty()判断Vector是否为空（返回true时为空）
+vector::end()返回最末元素的迭代器(译注:实指向最末元素的下一个位置)
+vector::erase()删除指定元素
+vector::front()返回第一个元素
+vector::get_allocator()返回vector的内存分配器
+vector::insert()插入元素到Vector中
+vector::max_size()返回Vector所能容纳元素的最大数量（上限）
+vector::pop_back()移除最后一个元素
+vector::push_back()在Vector最后添加一个元素
+vector::rbegin()返回Vector尾部的逆迭代器
+vector::rend()返回Vector起始的逆迭代器
+vector::reserve()设置Vector最小的元素容纳数量
+vector::resize()改变Vector元素数量的大小
+vector::size()返回Vector元素数量的大小
+vector::swap()交换两个Vector
+c++ stl容器vector基本操作:
+(1)包含头文件  
+1	 #include<vector>
+(2)创建vector对象: 
+1	vector<int> vec;
+(3)尾部插入数字：
+1	vec.push_back(a);
+(4)使用下标访问元素: 
+1	cout<<vec[0]<<endl; //记住下标是从0开始的。
+(5)使用迭代器遍历访问元素.
+1
+2
+3	vector<int>::iterator it;
+for(it=vec.begin();it!=vec.end();it++)
+    cout<<*it<<endl;
+(6)插入元素：    
+1	vec.insert(vec.begin()+i,a); //在第i+1个元素前面插入a;
+(7)删除元素：    
+1	vec.erase(vec.begin()+2); //删除第3个元素
+1	vec.erase(vec.begin()+i,vec.end()+j); //删除区间[i,j-1];区间从0开始
+(8)向量大小:   
+1	vec.size();
+(9)清空:
+1	vec.clear();
+
+
+
+容器使用的示例：
+例7.5
+#include <vector>
+#include<iostream>
+using namespace std;
+int main()
+{
+  vector<int > sample(3,5);//向量sample的无素初始化为3个5
+  vector <int > intv; //intv相当于一个数组
+  int temp,i;
+  cout<<"Enter numebers and press 0 to end"<<endl;
+  cin>>temp;
+  while(temp!=0) //直到输入0为止
+  {
+    intv.push_back (temp); //在向量的尾部插入temp
+	cin>>temp;
+  }
+  cout<<"There are "<<intv.size()<<" elements in intv."<<endl;
+  for(i=0;i<intv.size();i++)
+       cout<<intv[i]<<" ";
+   cout<<endl;
+   cout<<"Sample elements is ";
+   for(i=0;i<3;i++)
+	   cout<<sample[i]<<" ";
+   cout<<endl;
+   return 0;
+}
+
+2.迭代器（iterator）
+例7.9：迭代器的使用
+#include<iostream>
+#include<vector>
+using namespace std;
+int main()
+{
+	int i;
+   vector <char > v;
+   v.push_back('a');
+   v.push_back('b');
+   v.push_back('c');
+   v.push_back('d');
+   for(i=0;i<v.size();i++)
+   {
+     cout<<"v["<<i<<"]=="<<v[i]<<endl;
+   }
+   
+   vector<char>::iterator p=v.begin(); //定义迭代器并初始化为容器的起始位置
+   cout<<"The third is "<<v[2]<<endl;
+   p++;  //迭代器移向下一个数据项
+   cout<<*p<<endl;
+   p++;
+   cout<<*p<<endl;
+   p--;
+   cout<<*(p+2)<<endl;
+   return 0;
+}
+
+例7.11：容器迭代器举例以及find（）算法的用法
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+int main()
+{
+  vector<int >intVector(20,5);//定义一个容器
+  intVector[5]=50;
+  vector<int >::iterator intIter;//定义一个指向该容器的迭代器
+  intIter=find(intVector.begin(),intVector.end(),50);
+
+  if(intIter!=intVector.end())
+	  cout<<*intIter<<"found in vector"<<endl;
+  else 
+	  cout<<"50 not found in vector"<<endl;
+  return 0;
+}
+例7.12：容器迭代器
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+int main()
+{
+	vector<int >::iterator p;
+	vector<int > v(10);
+	int n=0;
+	for(p=v.begin();p!=v.end();p++)
+	{
+	  *p=n++;
+	}
+	for(p=v.begin();p!=v.end();p++)
+	{
+	cout<<*p<<" ";
+	} 
+	cout<<endl;
+	return 0;
+}
+
+3.算法（algorithm）
+（1）STL算法主要有三种类别，不改变序列的算法，改变序列的算法，排序算法。
+（2）不改变序列的算法（查找，检查一致性，计数等）
+1.find():可以搜索一个容器，定位该元素在容器中的位置。
+它可以接受3个参数。头两个是元素在序列开头和结尾的迭代器，第三个是要查找的值。它的返回值是指向第一个与要查找值相匹配元素的迭代器。找不到就返回最后一个元素的迭代器。
+例7.13
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+int main()
+{
+   vector<char > line;
+   cout<<"Enter a line of text."<<endl;
+   char next;
+   cin.get(next);
+   while(next!='\n')
+   {
+      line.push_back(next);
+	  cin.get(next);
+   }
+   vector<char >::iterator where;
+   where=find(line.begin(),line.end(),'e');
+
+   vector<char>::iterator p;
+   cout<<"before first e:\n";
+   for(p=line.begin();p!=where;p++)
+   {
+      cout<<*p;
+   }
+   cout<<endl;
+
+   cout<<"After first e:\n";
+   for(p=where;p!=line.end();p++)
+	   cout<<*p;
+   cout<<endl;			
+	cout<<"The end\n";
+	return 0;
+}
+例7.14
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#include<vector>
+using namespace std;
+int main()
+{
+	int arr1[]={3,4,5,7,7,7,6,8,9,8};
+	vector <int > vect_1(arr1,arr1+sizeof(arr1)/sizeof(int ));
+	int arr2[]={2,3,4,7,7,7,9,7};
+	vector <int > vect_2(arr2,arr2+sizeof(arr2)/sizeof(int ));
+	vector <int >::iterator p;
+	//找出相邻两个元素相等的第一个元素
+	p=adjacent_find(vect_1.begin(),vect_2.end());
+	cout<<*p<<endl;
+	//统计vect_1中元素为7的个数
+	cout<<count(vect_1.begin(),vect_1.end(),7)<<endl;
+	//统计vect_1中元素小于7的个数
+	cout<<count_if(vect_1.begin(),vect_1.end(),bind2nd(less<int >(),7))<<endl;
+	//判断两个容器是否相等(0为假，1为真)
+	cout<<equal(vect_1.begin(),vect_1.end(),vect_2.begin())<<endl;
+	return 0;
+}
+（3）改变序列的算法
+例7.15
+#include<iostream>
+#include<list>
+#include<algorithm>
+#include<vector>
+using namespace std;
+int main()
+{
+	list<char >line;
+	vector<char >word(3);
+	line.push_back('S');
+	line.push_back('T');
+	line.push_back('L');
+	list<char >::iterator q=line.begin();
+	copy(line.begin(),line.end(),word.begin());//copy可以复制，将一系列的对象复制到特定的目标
+	vector<char >::iterator p=word.begin();
+	while(p!=word.end())
+	{
+	cout<<*p++;
+	}
+	cout<<endl;
+	return 0;
+}
+
+一些能改变序列的泛型算法：
+remove(vector_iterator first,vector_iterator last,const T&target)
+//从范围[first,last]中删除那些等于target的元素
+reserve(vector_iterator first,vector_iterator last)
+//将[first,last]中的元素逆序排列
+replace(vector_iterator first,vector_iterator last,const T&target1,const T&target2)
+//将范围[first,last]等于target1的元素置换成target2
+
+（4）排序算法
+例7.16，sort算法举例
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+int main()
+{
+	int arr1[]={3,14,5,17,27,7,6,18,9,8};
+	vector <int > vect_1(arr1,arr1+sizeof(arr1)/sizeof(int ));
+	sort(vect_1.begin(),vect_1.end());//sort默认升序排列
+	vector<int >::iterator p=vect_1.begin();
+	while(p!=vect_1.end())
+		cout<<*p++<<" ";
+	cout<<endl;
+	return 0;
+}
+4.string类型
+例7.17
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	const char text[]="hello world";
+	string s1=text;
+	string s2(s1); //拷贝构造函数
+	string s3(&text[0],&text[5]); //用字符串的部分，想当于s3=hello
+	string s4(10,'0');//用一个0的序列初始化
+	string s5(s2.begin(),s2.find(' '));
+	cout<<s1<<endl;
+	cout<<s2<<endl;
+	cout<<s3<<endl;
+	cout<<s4<<endl;
+	cout<<s5<<endl;
+	return 0;
+}
+
+---string(const char *s)//用指针s所指向的字符串初始化string类的对象。
+
+---string类的I/O:string的输入时，提取运算符会忽略空格，输出时遇到第一个空格就会停止。如果希望程序整行读入一个string类型的变量，那么可以用getline函数。
+例7.18
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	string subject("We love ");
+	string object;
+	getline(cin,obj,'.'); //第三个参数，指定接收到的字符时停止读入
+	cout<<subject<<object<<endl;
+	return 0;
+}
+
+5.对字符串的操作，见书本P230-P232
+
+第八章：C++语言的流类库与输入输出控制
+
+1.C++把数据间的传递成为流。流，若干个字节序列从一个对象传递到另一个对象。
+2.C++提供了两种格式控制的方法：一种是ios类中的有关格式控制，另一种是操纵函数控制。
+3.（1）利用ios类成员函数控制
+#include<iostream>
+using namespace std;
+int main()
+{
+	cout.precision(5);
+	cout<<123.456789<<endl; //没有fixed等固定符，这里输出123.46
+
+	//fill使用时和width同时出现
+	cout.width(10);//设置显示区域宽10
+	cout.fill('*');//在显示区域空白处用*填充
+
+	cout.unsetf(ios::left);//清除状态左对齐
+	cout.setf(ios::right);//设置右对齐
+
+	cout<<123.456789<<endl;
+	cout.setf(ios::left|ios::fixed);    //设左对齐，以固定小数位数显示
+	cout.precision(3);
+	cout<<999.123456<<endl; //有fixed，这里保留小数点后3位，输出999.123
+
+	cout.unsetf(ios::left|ios::fixed);//清除状态左对齐和定点格式
+	cout.setf(ios::left|ios::scientific);  //设置左对齐，以科学计数法显示
+	cout.precision(3);//设置保留3位小数
+	cout<<123.45678<<endl;
+return 0;    
+}
+
+（2）用操纵函数进行格式化控制
+#include <iostream>
+#include <iomanip>
+using namespace std;
+int main()
+{
+	int a=128;
+	cout<<"dec:"<<dec<<a<<endl;  
+	cout<<"hex:"<<hex<<a<<endl; 
+	cout<<"oct:"<<oct<<a<<endl;
+	char pt[]="Nanjing";
+	cout<<setw(10)<<pt<<endl; 
+	cout<<setfill('*')<<setw(10)<<pt<<endl;
+	double B=27.123456789;
+	cout<<setiosflags(ios::scientific)<<setprecision(8);
+	cout<<"B="<<B<<endl; 
+	cout<<"B="<<setprecision(4)<<B<<endl; 
+	cout<<resetiosflags(ios::scientific);
+	cout<<"B="<<setiosflags(ios::fixed)<<setprecision(6)<<B;
+	cout<<endl;
+	return 0;
+}
+
+4.文件的输入和输出
+（1）利用get（）和put()实现将文本文件abc.txt的内容复制到xyz.txt（xyz.txt事先要被建立）
+注：instream 是从文件读数据，ofstream是向文件写数据
+
+#include<iostream>
+#include<fstream>  //对文件操作的头文件
+using namespace std;
+int main()
+{
+	ifstream ifile("d:\\abc.txt");  //定义一个输入流对象ifile,打开被复制的文件，该文件已在D盘建立
+	if(!ifile)  //判断是否被正常打开
+	{
+		cout<<"abc.txt cannot be opened!"<<endl;
+		return 0;
+	}
+	ofstream ofile("d:\\xyz.txt");  //定义一个输出流对象ofile,在D盘根目录下建立目标文件xyz.txt
+	if(!ofile)
+	{
+		cout<<"xyz.txt can not be opened!"<<endl;
+		return 0;
+	}
+	char ch;
+	while(ifile.get(ch))  //从源文件中读取一个字符给ch
+		ofile.put(ch);   //将ch写入目标文件
+
+	ifile.close();   //关闭源文件
+	ofile.close();  //关闭目标文件
+	return 0;
+}
+
+（2）对文件操作的几个示例
+#include <fstream>
+int main()
+{	ifstream fin("new.txt");
+	if(!fin)
+	{cout<<"can not open file!”;	}	
+	char str[30];
+	int n;
+	fin>>n;
+	fin.getline(str,30);
+	cout<<str<< " "<<n;
+	return 0;}
+
+
+#include <fstream>
+int main()
+{	ifstream fin("new.txt");
+	if(!fin)
+	{cout<<"can not open file!”;	}
+	char c;
+	while(!fin.eof())
+	{	fin.get(c);
+		cout<<c;	}
+	return 0;}
+
+
+#include <fstream>
+int main()
+{	ifstream fin("new.txt");
+	if(!fin)
+	{	cout<<"can not open file!“;	}
+	char c;
+	while(fin.get(c))
+	{		cout<<c;	}
+	return 0;}

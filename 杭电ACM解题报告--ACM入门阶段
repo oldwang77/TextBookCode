@@ -1,0 +1,1478 @@
+HDOJ杭电ACM解题报告
+---ACM入门阶段
+
+
+
+第二阶段（算法）
+2091
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	char str;
+	int n,flag=0;
+	int i,j,k,q,p;
+	while(cin>>str&&str!='@'&&cin>>n){
+		if(flag){ cout<<endl;}
+		int ans=n;
+		for(q=0;q<n-1;q++)
+			cout<<" ";
+		cout<<str<<endl;
+		for(i=1;i<n-1;i++){
+			for(k=ans-i-2;k>=0;k--) cout<<" ";
+			cout<<str;
+			for(j=1;j<=2*i-1;j++) cout<<" ";
+			cout<<str;
+			cout<<endl;
+		}
+		for(p=1;p<=2*ans-1;p++)
+			cout<<str;
+		cout<<endl;
+		flag=1;
+	}
+	return 0;
+}
+
+1018
+题目：给定一个大数，求大数的阶乘又多少位。
+法一：任意一个正整数a的位数是(int )log10(a)+1.
+#include <stdio.h>
+#include <math.h>
+int main()
+{
+int t,n,i;
+double w;
+   scanf("%d",&t);
+   while(t--)
+   {
+	   scanf("%d",&n);
+       w=1;
+	   for(i=1;i<=n;i++)
+	   {
+       w=w+log10(i);
+	   }
+	   printf("%d\n",(int)w);
+   }
+return 0;
+}
+法二：
+公式：斯特林公式求n!的位数
+利用斯特林（Stirling）公式的进行求解。下面是推导得到的公式：
+　res=(long)( (log10(sqrt(4.0*acos(0.0)*n)) + n*(log10(n)-log10(exp(1.0)))) + 1 );
+　当n=1的时候，上面的公式不适用，所以要单独处理n=1的情况！
+#include <stdio.h>
+#include <math.h>
+int main()
+{
+int t,n,i;
+double w;
+   scanf("%d",&t);
+   while(t--)
+   {
+	   scanf("%d",&n);	   
+       w=(long)( (log10(sqrt(4.0*acos(0.0)*n)) + n*(log10(n)-log10(exp(1.0)))) + 1 );
+	   printf("%d\n",(int)w);
+   }
+return 0;
+
+1004
+#include<iostream>
+#include<map>
+#include<string>
+using namespace std;
+int main()
+{
+	int n;
+	char ch;
+	string s;
+	map<string,int > balloon;
+ while(	scanf("%d",&n)!=EOF&&n ){
+	while(n--){
+		s="";
+		while(1){
+			scanf("%c",&ch);
+			if(ch=='\n') break;
+			s+=ch;	
+		}
+		balloon[s]++;
+	}
+	map<string,int >::iterator it;
+	for(it=balloon.begin();it!=balloon.end();it++)	{
+		cout<<it->first<<" ";
+		cout<<it->second<<endl;
+	}
+	balloon.clear();
+ }
+	return 0;
+}
+
+
+2081
+#include<iostream>
+#include<string>
+#include<cstdio>
+using namespace std;
+int main(){
+	int n,i;
+	string s; 
+	cin>>n;
+	while(n--)
+	{
+		s="";
+		cin>>s;
+		cout<<'6';
+		for(i=6;i<11;i++)
+			cout<<s[i];   //在C语言中，字符串本质上是字符数组。在C++中，有一个string类型，字符串可以直接加减，赋值。
+		cout<<endl;
+	}
+	return 0;	
+}
+2072 map的处理
+#include<iostream>
+#include<algorithm>
+#include<map>
+#include<string>
+using namespace std;
+int main()
+{
+	int n;
+	string s;
+	char ch;
+	while(~scanf("%c",&ch)&& ch!='#')
+	{
+		map <string ,int > words;
+		n=0;s="";
+		while(1)
+		{
+			if(ch>='a'&&ch<='z')
+			{
+				s+=ch;
+			}
+
+			if((ch==' '||ch=='\n')&&s!="")
+			{
+				words[s]++;
+				s="";
+			}
+			if(ch=='\n') break;
+			scanf("%c",&ch);
+		}
+		map<string ,int >::iterator it;
+		for(it=words.begin();it!=words.end();it++)
+			n++;
+		cout<<n<<endl;
+	
+		map<string ,int >::iterator It;
+		for(It=words.begin();It!=words.end();It++)
+		{ 
+			cout<<It->first<<" ";   //打印Key的值
+			cout<<It->second<<endl;  //打印Value的值
+		}
+	}
+	return 0;
+}
+
+第一阶段（入门）
+2000
+#include<iostream>
+using namespace std;
+int main()
+{
+	char a,b,c,d;
+	char x,y,z;
+	while(cin>>a>>b>>c)
+	{
+	  	x=a<b?a:b;	
+         x=x<c?x:c;
+         z=a>b?a:b;
+         z=z>c?z:c;
+         y=a+b+c-x-z;
+		 cout<<x<<" "<<y<<" "<<z<<endl;
+	}
+	return 0;
+}
+2001
+	#include <iostream>
+	#include<cmath>
+	#include<iomanip> //小数点后两位的头文件
+    using namespace std;
+	 int main()
+	 {
+		double x1,y1,x2,y2;
+		cout<< fixed << showpoint << setprecision(2) ;//小数点后两位
+		while(cin>>x1>>y1>>x2>>y2)
+		{
+		cout<<sqrt(pow(x1-x2,2)+pow(y1-y2,2))<<endl;
+		}
+	 }
+
+2002
+	#include <iostream>
+	#include<cmath>
+	#include<iomanip> //小数点后两位的头文件
+    using namespace std;
+	 int main()
+	 {
+		double x1,y1,x2,y2;
+		cout<< fixed << showpoint << setprecision(2) ;//小数点后两位
+		while(cin>>x1>>y1>>x2>>y2)
+		{
+		cout<<sqrt(pow(x1-x2,2)+pow(y1-y2,2))<<endl;
+		}
+	 }
+2004
+#include<iostream>
+using namespace std;
+int main()
+{
+	int a;
+    while(cin>>a)
+	{
+	if(a>=90&&a<=100)
+		cout<<"A"<<endl;
+	else if(a<=89&&a>=80)
+		cout<<"B"<<endl;
+	else if(a>=70&&a<=79)
+		cout<<"C"<<endl;
+	else if(a>=60&&a<=69)
+		cout<<"D"<<endl;
+	else if(a>=0&&a<=59)
+		cout<<"E"<<endl;
+
+	else if(a<0||a>100)
+		cout<<"Score is error!"<<endl;
+	}
+}
+2005
+#include<iostream>
+using namespace std;
+int main()
+{
+   int month[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+   int y,m,d,i;
+   int sum=0;
+   while(scanf("%d/%d/%d",&y,&m,&d)!=EOF)
+   {
+      if((y%4==0)&&(y%100)!=0||(y%400==0)) 
+		  month[1]=29;
+	  else 
+		  month[1]=28;
+	  if(m==1)
+	  {
+		cout<<d<<endl;
+	  }
+	  else
+	  {
+		for(i=0;i<m-1;i++)
+			sum+=month[i];
+		cout<<sum+d<<endl;
+	  }
+   }
+   return 0;
+}
+
+2006
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n,a,s;
+	while(cin>>n)
+	{
+		s=1;
+		while(n--)
+		{
+			cin>>a;
+			if(a%2==1)
+			{
+				s*=a;
+			}
+		}
+		cout<<s<<endl;	
+	}
+   return 0;
+}
+2007
+#include<iostream>
+using namespace std;
+int main()
+{
+	int a,b,c,s1,s2,i;
+	while(cin>>a>>b)
+	{
+		s1=0;s2=0;
+		if(a>b)
+		{
+			c=a;
+			a=b;
+			b=c;
+		}
+		for(i=a;i<=b;i++)
+		{
+			if(i%2==0)
+				s1+=i*i;
+			else
+				s2+=i*i*i;
+		}
+		cout<<s1<<" "<<s2<<endl;
+		return 0;
+	}
+}
+2008
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n,a,b,c;
+	float x;
+	while(cin>>n&&n!=0)
+	{
+		a=0;b=0;c=0;
+		while(n--)
+		{
+			cin>>x;
+			if(x>0) 
+				a++;
+			else if(x==0)
+				b++;
+			else 
+				c++;
+		}
+		cout<<c<<" "<<b<<" "<<a<<" "<<endl;
+	}
+	return 0;
+}
+2010水仙花数
+#include<iostream>
+using namespace std;
+int main()
+{
+	int m,n;
+	int i,j,a,b,c;
+	while(cin>>m>>n)
+	{
+		j=0;
+		for(i=m;i<=n;i++)
+		{
+			a=i/100;
+			b=(i/10)%10;
+			c=i%10;
+
+			if(a*a*a+b*b*b+c*c*c==i)
+			{
+				if(j==1)   //格式技巧，学习
+				cout<<" ";
+				cout<<i;
+				j=1;
+			}
+		}
+		if(j==0)
+			cout<<"no"<<endl;
+		else
+			cout<<"\n";
+	}
+	return 0;
+}
+
+2011
+#include<iostream>
+#include<cmath>
+#include<iomanip>
+using namespace std;
+
+int main()
+{
+    int m,n;
+	double i,item,sum=0;
+	cout<<fixed<<showpoint<<setprecision(2);
+	cin>>m;
+	while(m--)
+	{
+		sum=0;
+		cin>>n;
+		for(i=1;i<=n;i++)
+		{
+			item=pow(-1,i+1)*1.0/i;
+			sum+=item;	
+		}
+		cout<<sum<<endl;		
+	}
+return 0;
+}
+
+1720
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+     int a,b;
+     while(scanf("%x%x",&a,&b)!=EOF){
+     printf("%d\n",a+b);
+      }
+    return 0;
+}
+
+1062（字符串的逆放）
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int main()
+{
+     int m;
+	 int i,j;
+	 char str[1100];
+		cin>>m;
+		getchar();
+	 while(m--)
+	 {
+		 gets(str);
+		 int begin=0;
+		 for(i=0;i<=strlen(str);i++)
+		 {
+			if(str[i]==' '||str[i]=='\0')
+			{
+				reverse(str+begin,str+i);
+				begin=i+1;
+			}
+		 }	
+		 puts(str);
+	 }
+    return 0;
+}
+2104 辗转相除法求最大约数
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int main()
+{
+     int a,b,temp;
+	 while(cin>>a>>b&&(a!=-1||b!=-1))
+	 {
+		 while(b!=0)
+		 {
+			temp=b;
+			b=a%b;
+			a=temp;			
+		 }
+
+		 if(a==1)
+			 cout<<"YES"<<endl;
+		 else
+			 cout<<"POOR Haha"<<endl;
+	 }
+    return 0;
+}
+2734
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int i;
+	char str[1000];
+	while(gets(str)&&str[0]!='#')
+	{
+		int l=strlen(str);
+		long sum=0;
+		for(i=0;i<l;i++)
+		{
+			if(str[i]!=' ')
+			sum+=(str[i]-'A'-1)*(i+1);
+		}
+		cout<<sum<<endl;
+	}
+	return 0;
+}
+
+1170
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int n,a,b;
+	char str;
+	cin>>n;
+	while(n--)
+	{
+		cin>>str;
+		cin>>a>>b;
+		if(str=='+')
+			cout<<a+b<<endl;
+		if(str=='-')
+			cout<<a-b<<endl;
+		if(str=='*')
+			cout<<a*b<<endl;
+		if(str=='/')
+		{
+			if(a%b!=0)
+			{
+				printf("%.2f\n",(double)a/b);
+			}
+			else
+			{
+				printf("%d\n",a/b);
+			}
+		}
+	}
+	return 0;
+}
+1197将数字转换为10进账，12进制，16进制求和
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int i;
+	int a[3]={0};
+	for(i=2992;i<=9999;i++)
+	{
+		int m,n,p;
+		m=i;n=i;p=i;
+		while(m)
+		{
+			a[0]+=m%10;
+			m=m/10;
+		}
+		while(n)
+		{
+			a[1]+=n%12;
+			n=n/12;
+		}
+		while(p)
+		{
+			a[2]+=p%16;
+			p=p/16;
+		}
+		if(a[0]==a[1]&&a[0]==a[2])
+		{
+			cout<<i<<endl;
+		}
+	}
+	return 0;
+}
+2629
+#include<iostream>
+#include<string>  //字符串处理
+using namespace std;
+int main()
+{
+	int n;
+	char a[18];
+	string str;   //定义成字符串，方便处理
+	cin>>n;
+	//getchar();
+	while(n--)
+	{
+		gets(a); //gets可以接受一个字符串，注意，如果这里定义为int a[20],就不可以啦。
+		int i;
+		for(i=0;i<18;i++)
+		{
+			cin>>a[i];
+		}
+		if(a[0]=='3'&&a[1]=='3') //这里是字符''
+			str="Zhejiang";
+		if(a[0]=='1'&&a[1]=='1')
+			str="Bejing";
+		if(a[0]=='7'&&a[1]=='1')
+			str="Taiwan";
+		if(a[0]=='8'&&a[1]=='1')
+			str="Hong Kong";
+		if(a[0]=='8'&&a[1]=='2')
+			str="Macao";
+		if(a[0]=='5'&&a[1]=='4')
+			str="Tibet";
+		if(a[0]=='2'&&a[1]=='1')
+			str="Liaoning";
+		if(a[0]=='3'&&a[1]=='1')
+			str="Shanghai";
+		cout<<"He/She is from "<<str;
+	    cout<<",and his/her birthday is on "<<a[10]<<a[11]<<","<<a[12]<<a[13]<<","<<a[6]<<a[7]<<a[8]<<a[9]<<" based on the table."<<endl;
+	}
+	return 0;
+}
+
+标答：
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main ()
+{
+	char a[20];
+	int n;
+	cin>>n;
+	getchar();
+	while(n--)
+	{	
+		memset(a,0,sizeof(a));
+		gets(a);
+		string place;
+		if( a[0]=='3' && a[1]=='3' )
+			place="Zhejiang";
+		if( a[0]=='7' && a[1]=='1' )
+			place="Taiwan";
+		if( a[0]=='1' && a[1]=='1' )
+			place="Beijing";
+		if( a[0]=='8' && a[1]=='1' )
+			place="Hong Kong";
+		if( a[0]=='3' && a[1]=='1' )
+			place="Shanghai";
+		if( a[0]=='2' && a[1]=='1' )
+			place="Liaoning";
+		if( a[0]=='5' && a[1]=='4' )
+			place="Tibet";
+		if( a[0]=='8' && a[1]=='2' )
+			place="Macao";
+		
+		cout<<"He/She is from "<<place;
+		cout<<",and his/her birthday is on "<<a[10]<<a[11]<<","<<a[12]<<a[13]<<","<<a[6]<<a[7]<<a[8]<<a[9]<<" based on the table."<<endl;
+	}
+	return 0;
+}
+
+2012
+#include<iostream>
+#include<string>
+#include<math.h>
+using namespace std;
+int JudgePrime(int z)
+{
+	int i,j;
+	int flag=0;
+	i=sqrt(z);
+	for(j=2;j<i;j++)
+	{
+		if(z%j==0)
+		{
+			flag=1;
+			break;
+		}
+	}
+return flag;
+}
+
+int main()
+{
+	int x,y;
+	while(cin>>x>>y)
+	{
+		if(x==0&&y==0)
+		{
+			return 0;
+		}
+		int z;
+		int i;
+		int flag=0;
+		int count=0;
+		for(i=x;i<y;i++)
+		{
+			z=i*i+i+41;
+			if(JudgePrime(z)==1)
+			count++;
+		}
+		if(count>0)
+			cout<<"Sorry"<<endl;
+		else
+			cout<<"OK"<<endl;
+	}
+	return 0;
+}
+2014
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+	int n,i;
+	int min,max;
+	int a[100];
+	double ave;
+	double sum=0;	
+	while(cin>>n)
+	{
+		memset(a,0,sizeof(a));  //用数组解题时，一定要先初始化，一定要注意
+		sum=0;
+	for(i=0;i<n;i++)
+		cin>>a[i];
+
+		max=a[0];
+		min=a[0];
+	for(i=0;i<n;i++)
+	{	
+		sum+=a[i];
+		max=a[i]>max?a[i]:max;
+		min=a[i]<min?a[i]:min;
+	}
+	ave=(sum-max-min)/(n-2);
+	printf("%.2f\n",ave);
+	}
+return 0;
+}
+
+2015
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int m,n,sum1;
+	int i,zushu,yushu;
+	int sum2[100];
+	int sum3=0;
+	while(cin>>n>>m)//每组有m个数
+	{
+		int j;
+		sum1=0;
+		sum2[0]=0;
+		for(j=1;j<=m;j++)
+		{
+			sum2[0]+=j;
+		}
+		zushu=n/m;
+		yushu=n%m;
+		if(zushu==0)
+		{
+			for(i=1;i<=n;i++)
+			{
+				sum1+=i;
+				cout<<2*sum1/n;
+			}
+		}
+		else
+		{
+			if(zushu>1)
+			{
+				for(i=0;i<zushu-1;i++)
+				{
+					sum2[i+1]=sum2[i]+m*m;
+				}
+			}
+			sum3=0;
+			for(i=zushu*m+1;i<=n;i++)
+			{
+				sum3+=i;
+			}
+
+			for(i=0;i<zushu;i++)
+			{
+				cout<<2*sum2[i]/m;
+				if(i!=zushu-1)
+				{
+					cout<<" ";
+				}
+			}
+			if(yushu!=0)
+			{
+				cout<<" "<<2*sum3/(yushu);
+			}
+		}
+		cout<<endl;
+	}
+	return 0;
+}
+2016
+	#include<iostream>
+	#include<string.h> //memset头文件是#include<string.h>
+	using namespace std;
+	int main()
+	{
+		int n,flag;
+		int a[100];
+		int min,i,temp;
+		while(cin>>n&&n!=0)
+		{
+			flag=0;
+			memset(a,0,sizeof(a));
+
+				for(i=0;i<n;i++)
+				{
+					cin>>a[i];
+				}
+					min=a[0];
+				for(i=0;i<n;i++)
+				{
+					if(a[i]<=min)
+					{
+						flag=i;
+						min=a[i];
+					}
+				}
+				temp=a[0];
+				a[0]=min;
+				a[flag]=temp;
+				for(i=0;i<n;i++)
+				{
+					cout<<a[i];
+					if(i!=n-1)
+					{
+						cout<<" ";
+					}
+				}
+			cout<<endl;	
+		}
+	return 0;	
+	}
+
+
+
+2017（字符串的处理，值得多看）
+}
+#include<iostream>
+#include<string.h>  //strlen的头文件
+using namespace std;
+int main()
+{
+	char str[1000];
+	int n;
+	int len;
+	int count,i;
+	while(cin>>n)
+	{
+		getchar();
+		while(n--)
+		{
+			count=0;
+			gets(str);
+			len=strlen(str);
+			for(i=0;i<len;i++)
+			{ 
+				if(str[i]>='0'&&str[i]<='9')
+				{
+					count++;
+				}
+			}
+			cout<<count<<endl;
+		}
+	}
+	return 0;
+}
+
+2019做法很巧妙
+#include<iostream>
+using namespace std;
+int main()
+{
+	int len,x,a[100]={0};
+	int i;
+	while(cin>>len>>x)//带插入数据为x
+	{
+		if(len==0&&x==0)
+			continue;
+		int temp;
+		for(i=0;i<len;i++)
+		{
+			cin>>a[i];
+			if(x<a[i])
+			{
+				temp=a[i];
+				a[i]=x;
+				x=temp;  //此时x存放的是数组中最大的那个数
+			}
+			cout<<a[i]<<" ";
+		}
+		cout<<x<<endl; //最后输出数组中最大的那个数
+	}		
+return 0;
+}
+
+2020
+#include<iostream>
+#include<math.h>
+using namespace std;
+void Sort(int *p,int n)
+{
+	int i,j;
+	int temp;
+	for(i=0;i<n;i++)
+	{
+		for(j=i+1;j<n;j++)
+		{
+			if(abs(p[j])>abs(p[i]))
+			{
+				temp=p[i];
+				p[i]=p[j];
+				p[j]=temp;
+			}
+		}
+	}
+	for(i=0;i<n;i++)
+	{
+		cout<<p[i];
+		if(i!=n-1)
+			cout<<" ";
+	}
+	cout<<endl;
+}
+int main()
+{
+	int n,i;
+	int a[100]={0};
+	while(cin>>n&&n!=0)
+	{
+		
+		for(i=0;i<n;i++)
+		{
+			cin>>a[i];
+		}
+		Sort(a,n);
+	}
+return 0;
+}
+
+2021
+#include<iostream>
+#include<math.h>
+using namespace std;
+int Sum(int m)
+{
+	int n1,n2,n3,n4,n5,n6;
+	int n;
+	n1=m/100;
+	n2=m%100/50;
+	n3=m%100%50/10;
+	n4=m%100%50%10/5;
+	n5=m%100%50%10%5/2;
+	n6=m%100%50%10%5%2/1;
+	n=n1+n2+n3+n4+n5+n6;
+	return n;
+}
+int main()
+{
+	int n,i,j,k;
+	int a[100]={0};
+	while(cin>>n&&n!=0)
+	{
+	int sum=0;
+	for(i=0;i<n;i++)
+	{
+		cin>>a[i];
+	}
+		for(k=0;k<n;k++)
+		{
+			sum+=Sum(a[k]);
+		}
+	cout<<sum<<endl;
+	}
+	return 0;
+}
+2022
+#include<iostream>
+#include<math.h>
+using namespace std;
+int main()
+{
+	int a[100][100];
+	int m,n;
+	while(cin>>m>>n)
+	{
+		int i,j;
+		int hangshu,lieshu;
+		int x,y;
+		for(x=0;x<m;x++)
+		{
+			for(y=0;y<n;y++)
+			{
+				cin>>a[x][y];
+			}
+		}
+		int max=a[0][0];
+		for(i=0;i<m;i++)
+		{
+			for(j=0;j<n;j++)
+			{
+				if(abs(a[i][j])>abs(max))
+				{
+					max=a[i][j];
+					hangshu=i;
+					lieshu=j;
+				}
+			}
+		}
+		cout<<hangshu+1<<" "<<lieshu+1<<" "<<max<<endl;
+	}
+return 0;
+}
+
+2023
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<math.h>
+using namespace std;
+int main()
+{
+	int n,m;
+	double StuAve[50],StuSum[50],StuScore[50][5],LessScore[5],LessAve[50];
+	while(cin>>n>>m)
+	{
+		int i,j;
+		memset(StuAve,0,sizeof(StuAve));
+		memset(StuSum,0,sizeof(StuSum));
+		memset(LessScore,0,sizeof(LessScore));
+		memset(LessAve,0,sizeof(LessAve));
+		//输入n组数据，记录n个学生m门的成绩
+		for(i=0;i<n;i++)
+		{
+			for(j=0;j<m;j++)
+			{
+				cin>>StuScore[i][j];
+			}
+		}
+
+		//分别计算每个学生各科成绩总和
+		for(i=0;i<n;i++)
+		{
+			for(j=0;j<m;j++)
+			{
+				StuSum[i]=StuSum[i]+StuScore[i][j];
+			if(j==m-1)
+				StuAve[i]=StuSum[i]/m;  //计算每个学生m门的平均成绩
+			}
+		}
+		
+		//计算每门课的平均成绩
+		for(j=0;j<m;j++)
+		{
+			for(i=0;i<n;i++)
+			{
+				LessScore[j]=LessScore[j]+StuScore[i][j]; 
+				if(i==n-1)
+				{
+					LessAve[j]=LessScore[j]/n;
+				}
+			}
+		}
+		//计算各科成绩高于平均分学生的个数
+		int count=0;
+		int temp=0;
+		for(i=0;i<n;i++)
+		{
+			temp=0;
+			count=0;
+			for(j=0;j<m;j++)
+			{
+				if(fabs(StuScore[i][j]-LessAve[j])<=0.00000001||StuScore[i][j]>LessAve[j])  //double型的数据大小比较，相等时只能写成两者之差
+				{
+					count++;
+					if(count==m)
+						temp++;
+				}
+			}
+		}
+		//输出n个学生的平均成绩
+			for(i=0;i<n;i++)
+			{
+					printf("%.2lf",StuAve[i]);
+					if(i!=n-1)
+						cout<<" ";
+			}
+			cout<<endl;
+		//输出m门课的平均成绩
+			for(j=0;j<m;j++)
+			{
+				printf("%.2lf",LessAve[j]);
+				if(j!=m-1)
+					cout<<" ";
+			}
+			cout<<endl;
+		//输出高于平均分学生的数量
+			cout<<temp<<endl;
+			cout<<endl;
+	}
+return 0;
+}
+
+2025
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	char str[100];
+	int i;
+	while(gets(str))
+	{
+		int flag=0;
+		for(i=0;i<strlen(str);i++)
+		{
+			if(str[i]>str[flag])
+				flag=i;
+		}
+		for(i=0;i<strlen(str);i++)
+		{
+			cout<<str[i];
+			if(str[i]==str[flag]) //但凡遇到和最大字符相等的，就打印max
+			{
+				cout<<"(max)";
+			}
+		}
+		cout<<endl;
+	}
+	return 0;
+}
+
+2026
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+	char a[100];
+	int len,i;
+	memset(a,0,sizeof(a));
+	while(gets(a))
+	{
+		len=strlen(a);
+		a[0]-=32;
+		for(i=1;i<len;i++)
+		{
+			if(a[i]==' ')
+			{
+				a[i+1]-=32;
+			}
+		}
+		for(i=0;i<len;i++)
+		{
+			cout<<a[i];
+		}
+		cout<<endl;
+	}
+	return 0;
+}
+
+2027 简单
+2028最小公倍数
+（1）暴力求解（不是好方法，了解一下）
+#include<iostream>
+#include<string.h>
+using namespace std;
+int Min(int a[],int n)
+{
+	int i;
+	int min=a[0];
+	for(i=0;i<n;i++)
+	{
+		if(a[i]<min)
+			min=a[i];
+	}
+	return min;
+}
+int main()
+{
+	int n,i,a[100];
+	int count,min;
+	unsigned long int val;
+	while(cin>>n)
+	{
+		count=0;
+		for(i=0;i<n;i++)
+		{
+			cin>>a[i];
+		}
+		val=Min(a,n);
+		
+       while(count!=n)
+		{
+			count=0;
+			for(i=0;i<n;i++)
+			{
+				if(val%a[i]==0) //直到val可以整除数组中每一个数为止，这种方法只试用于数据很少的情况。
+				{
+					count++;
+				}
+			}
+			val++;
+		}
+		cout<<val-1<<endl;
+	}	
+		
+return 0;
+}
+（2）
+#include<stdio.h>
+unsigned long f(unsigned long a,unsigned long b)//计算两个数的最小公倍数 
+{
+	unsigned long t;
+	unsigned c,d;
+	c=a;d=b;
+	if(a>b)
+	{
+		t=a;
+		a=b;
+		b=t;
+	}
+	while(a%b!=0)
+	{
+		t=a;
+		a=b;b=t%b;
+	}
+	return c*d/b;
+}
+main()
+{
+    int n;
+    unsigned long x;
+    while(scanf("%d",&n)!=EOF)
+    {
+    	unsigned long t=1;
+    	while(n--)
+    	{
+    	    scanf("%ld",&x);
+    	    t=f(t,x);
+	}
+	printf("%ld\n",t);
+    }
+}
+2029
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+	int n,i,j,k,flag,len;
+	char a[100],b[100];
+ 	cin>>n;
+	getchar();
+	while(n--)
+	{
+		flag=1;
+		gets(a);
+		len=strlen(a);
+		for(j=len-1,k=0;j>=0,k<len;j--,k++)
+		{
+			b[k]=a[j];
+		}
+		for(i=0;i<len;i++)
+		{
+			if(a[i]!=b[i])
+			{
+				flag=0;
+				break;
+			}
+		}
+		if(flag)
+			cout<<"yes"<<endl;
+		else
+			cout<<"no"<<endl;
+	}
+	return 0;
+}
+2030统计一个字符串中有多少汉字，利用汉字的阿斯克码是负的，并且汉字占两个字节的特点来算
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char a[100001];
+	int n;
+	int i;
+	int s;
+	scanf("%d",&n);
+	getchar();
+	while(n--)
+	{
+       gets(a);
+	   s=0;
+	   for(i=0;i<strlen(a);i++)
+	   {
+		   if(a[i]<0)
+			 s++;
+	   }
+	   printf("%d\n",s/2);
+	}
+	return 0;
+}
+
+2032 打印杨辉三角
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+	int a[100][100];
+	int h,i,j,k,q;
+	while(cin>>h)
+	{
+		for(i=0;i<h;i++)
+		{
+			a[i][0]=1;
+			a[i][i]=1;
+		}
+		if(i>2)
+		{
+			for(k=2;k<h;k++)
+			{
+				for(q=1;q<k;q++)
+				{
+					a[k][q]=a[k-1][q-1]+a[k-1][q];
+				}
+			}
+		}
+		for(i=0;i<h;i++)
+		{
+			for(j=0;j<=i;j++)
+			{
+				cout<<a[i][j];
+				if(j!=i)
+				{
+					cout<<" ";
+				}
+			}
+			cout<<endl;
+		}
+		cout<<endl;
+	}
+return 0;
+}
+2040
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+	int a,b,arr1[100],arr2[100];
+	int n,i,j,k;
+	cin>>n;
+	while(n--)
+	{
+		j=0;k=0;
+		cin>>a>>b;
+		for(i=1;i<=a;i++)
+		{
+			if(a%i==0)
+			{
+				arr1[j]=i;
+				j++;
+			}
+		}
+		//计算a中所有约数的和
+		int sum1=0;
+		j--;
+		for(i=0;i<j;i++)
+		{
+		sum1+=arr1[i];
+		}
+		
+		for(i=1;i<=b;i++)
+		{
+			if(b%i==0)
+			{
+				arr2[k]=i;
+				k++;
+			}
+		}
+		//计算b中所有约数的和
+		int sum2;
+		k--;
+		for(i=0;i<k;i++)
+		{
+			sum2+=i;
+		}
+
+		if(sum1==b||sum2==a)
+		{
+			cout<<"YES"<<endl;
+		}
+		else
+		{
+			cout<<"NO"<<
+				endl;
+		}
+	}
+return 0;
+}
+
+2054 大数比较（将大数存储在数组中，注意点很多，通过比较数组是否相等来看两个数是否一样大）
+#include<iostream>
+#include<string.h>
+using namespace std;
+//判断数字中是否包含字符'.'
+bool Search(char a[],int len,char c)
+{
+	int i;
+	for(i=0;i<len;i++)
+	{
+		if(a[i]==c)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+//一旦判断有小数点，删除小数点后末尾的0，方便比较
+int Delete(char a[],int len)
+{
+	int i;
+	for(i=len-1;i>=0;i--)
+	{
+		if(a[i]=='0') //注意此时开的是字符数组
+		{
+			len--;//len--实际上就相当于删除末尾的数
+		}
+		else
+			break; //一旦遇到末尾第一个不是0的数，就结束
+	}
+return len;
+}
+int main()
+{
+	char a[100010],b[100010];
+	int len1,len2;
+	while(scanf("%s%s",a,b)!=EOF)
+	{
+		len1=strlen(a);
+		len2=strlen(b);
+		//删除小数点后的0，方便比较
+		if(Search(a,len1,'.'))
+		{
+			len1=Delete(a,len1);
+		}
+		if(Search(b,len2,'.'))
+		{
+			len2=Delete(b,len2);
+		}
+		
+		//考虑10.=10的情况
+		if(a[len1-1]=='.') 
+		{
+			len1--;
+		}
+		if(b[len2-1]=='.')
+		{
+			len2--;
+		}
+
+		int i=0;
+		bool flag=true;
+		if(len1!=len2)
+		{
+			flag=false; //两个数组长度不一致，直接判断不等
+		}
+		else
+		{
+			while(i<len1) //遍历数组，比较大小
+			{
+				if(a[i]!=b[i])
+				{
+					flag=false;
+					break;
+				}
+				i++;
+			}
+		}
+		if(flag)
+		{
+			cout<<"YES"<<endl;
+		}
+		else
+		{
+			cout<<"NO"<<endl;
+		}
+
+	}
+	return 0;
+}
